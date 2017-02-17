@@ -1,0 +1,42 @@
+c:\users\simon\documents\visual studio 2015\Projects\SquiglyBot\SquiglyBot\obj\Debug\SquiglyBot.csprojResolveAssemblyReference.cache
+c:\users\simon\documents\visual studio 2015\Projects\SquiglyBot\SquiglyBot\bin\Debug\SquiglyBot.pdb
+c:\users\simon\documents\visual studio 2015\Projects\SquiglyBot\SquiglyBot\bin\Debug\Discord.Net.Audio.dll
+c:\users\simon\documents\visual studio 2015\Projects\SquiglyBot\SquiglyBot\bin\Debug\Discord.Net.Commands.dll
+c:\users\simon\documents\visual studio 2015\Projects\SquiglyBot\SquiglyBot\bin\Debug\Discord.Net.dll
+c:\users\simon\documents\visual studio 2015\Projects\SquiglyBot\SquiglyBot\bin\Debug\Discord.Net.Modules.dll
+c:\users\simon\documents\visual studio 2015\Projects\SquiglyBot\SquiglyBot\bin\Debug\Newtonsoft.Json.dll
+c:\users\simon\documents\visual studio 2015\Projects\SquiglyBot\SquiglyBot\bin\Debug\Nito.AsyncEx.Concurrent.dll
+c:\users\simon\documents\visual studio 2015\Projects\SquiglyBot\SquiglyBot\bin\Debug\Nito.AsyncEx.dll
+c:\users\simon\documents\visual studio 2015\Projects\SquiglyBot\SquiglyBot\bin\Debug\Nito.AsyncEx.Enlightenment.dll
+c:\users\simon\documents\visual studio 2015\Projects\SquiglyBot\SquiglyBot\bin\Debug\RestSharp.dll
+c:\users\simon\documents\visual studio 2015\Projects\SquiglyBot\SquiglyBot\bin\Debug\WebSocket4Net.dll
+c:\users\simon\documents\visual studio 2015\Projects\SquiglyBot\SquiglyBot\bin\Debug\Newtonsoft.Json.xml
+c:\users\simon\documents\visual studio 2015\Projects\SquiglyBot\SquiglyBot\bin\Debug\Nito.AsyncEx.xml
+c:\users\simon\documents\visual studio 2015\Projects\SquiglyBot\SquiglyBot\bin\Debug\Nito.AsyncEx.Concurrent.xml
+c:\users\simon\documents\visual studio 2015\Projects\SquiglyBot\SquiglyBot\bin\Debug\Nito.AsyncEx.Enlightenment.xml
+c:\users\simon\documents\visual studio 2015\Projects\SquiglyBot\SquiglyBot\bin\Debug\RestSharp.xml
+c:\users\simon\documents\visual studio 2015\Projects\SquiglyBot\SquiglyBot\obj\Debug\SquiglyBot.pdb
+C:\Users\Simon\Documents\Visual Studio 2015\Projects\SquiglyBot\SquiglyBot\bin\Debug\SquiglyBot.exe.config
+C:\Users\Simon\Documents\Visual Studio 2015\Projects\SquiglyBot\SquiglyBot\bin\Debug\SquiglyBot.exe
+C:\Users\Simon\Documents\Visual Studio 2015\Projects\SquiglyBot\SquiglyBot\obj\Debug\SquiglyBot.exe
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\bin\Debug\SquiglyBot.exe.config
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\obj\Debug\SquiglyBot.exe
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\obj\Debug\SquiglyBot.pdb
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\bin\Debug\SquiglyBot.exe
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\bin\Debug\SquiglyBot.pdb
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\bin\Debug\Discord.Net.Audio.dll
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\bin\Debug\Discord.Net.Commands.dll
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\bin\Debug\Discord.Net.dll
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\bin\Debug\Discord.Net.Modules.dll
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\bin\Debug\Nito.AsyncEx.Concurrent.dll
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\bin\Debug\Nito.AsyncEx.dll
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\bin\Debug\Nito.AsyncEx.Enlightenment.dll
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\bin\Debug\RestSharp.dll
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\bin\Debug\WebSocket4Net.dll
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\bin\Debug\Nito.AsyncEx.xml
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\bin\Debug\Nito.AsyncEx.Concurrent.xml
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\bin\Debug\Nito.AsyncEx.Enlightenment.xml
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\bin\Debug\RestSharp.xml
+C:\Users\Simon\Source\Repos\SquiglyBot\SquiglyBot\obj\Debug\SquiglyBot.csprojResolveAssemblyReference.cache
