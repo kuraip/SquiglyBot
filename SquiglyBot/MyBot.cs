@@ -1,5 +1,10 @@
 ﻿using Discord;
 using Discord.Commands;
+using Discord.Audio;
+using NAudio;
+using NAudio.Wave;
+using NAudio.CoreAudioApi;
+using TagLib;
 
 using System;
 using System.Collections.Generic;
@@ -16,6 +21,9 @@ namespace SquiglyBot
 
         public MyBot()
         {
+
+            /*COMMANDS*/
+
             discord = new DiscordClient(x =>
             {
                 x.LogLevel = LogSeverity.Info;
@@ -30,8 +38,21 @@ namespace SquiglyBot
 
             commands = discord.GetService<CommandService>();
 
+            /*AUDIO*/
+
+            discord.UsingAudio(x => // Opens an AudioConfigBuilder so we can configure our AudioService
+            {
+                x.Mode = AudioMode.Outgoing; // Tells the AudioService that we will only be sending audio
+                x.EnableEncryption = false;
+            });
+
+            RegisterVocalCommands();
+
+            /*FUNCTIONS*/
+
             WelcomeMessage();
             LeaveMessage();
+            Updates();
             RegisterHelpCommand();
             RegisterPingCommand();
             RegisterPurgeCommand();
@@ -56,7 +77,7 @@ namespace SquiglyBot
 
                 await Logging($"{e.User.Mention} has joined {e.Server.Name}.");
 
-                if (e.User.Id == 129323526267207680) //Automatically adds the role saucisse to Ovoui
+                if ((e.User.Id == 129323526267207680 || e.User.Id == 161905660735389696) && e.Server.Id == 210518320888152065) //Automatically adds the role saucisse to Ovoui and Renko
                 {
                     await e.User.AddRoles(e.Server.FindRoles("Saucisse").First());
                 }
@@ -69,6 +90,57 @@ namespace SquiglyBot
             {
                 await Logging($"{e.User.Mention} has left {e.Server.Name}.");
             };
+        }
+
+        private void Updates()
+        {
+            discord.UserUnbanned += async (s, e) =>
+            {
+                if (e.User.Id != 129323526267207680 && e.Server.Id == 210518320888152065)
+                {
+                    await Logging($"{e.User.Mention} has been unbanned from {e.Server.Name}.");
+                }
+                    
+            };
+        }
+
+        private void RegisterVocalCommands()
+        {
+            commands.CreateCommand("v")
+                .Parameter("action", Discord.Commands.ParameterType.Required)
+                .Do(async (e) =>
+                {
+                    string action = e.GetArg("action");                    
+                    var voiceChannel = discord.GetServer(e.Server.Id).VoiceChannels.FirstOrDefault();
+                    var _vClient = await discord.GetService<AudioService>().Join(voiceChannel);
+
+                    if (action == "join")
+                    {
+                        await LogAudio($"Joined voice channel '{voiceChannel.Name}' in '{e.Server.Name}' (by {e.User.Name})");
+                    }
+                    else if (action == "leave")
+                    {
+                        await _vClient.Disconnect();
+                        await LogAudio($"Left voice channel '{voiceChannel.Name}' in '{e.Server.Name}' (by {e.User.Name})");
+                    }
+                    else if (action == "play")
+                    {
+                        string folderPath = "C:\\Documents\\Musiques\\";
+                        Random rnd = new Random();
+                        IEnumerable<string> musicPlaylist = System.IO.Directory.GetFiles(folderPath, "*.mp3", System.IO.SearchOption.AllDirectories).OrderBy(x => rnd.Next());
+                        IEnumerator<string> musicEnumerator = musicPlaylist.GetEnumerator();
+                        musicEnumerator.MoveNext();
+
+                        TagLib.File music = TagLib.File.Create(musicEnumerator.Current);
+                        String title = music.Tag.Title;
+                        String artist = music.Tag.FirstPerformer;
+                        String length = music.Properties.Duration.ToString(@"mm\:ss");
+
+                        await LogAudio($"Playing: {artist} - {title} ({length}).");
+                        await e.Channel.SendMessage($"Playing: {artist} - {title} ({length}).");
+                        SendAudio(musicEnumerator.Current, _vClient);
+                    }
+                });
         }
 
         private void RegisterPingCommand()
@@ -101,6 +173,7 @@ namespace SquiglyBot
                         "\n!purge <1-10>: Deletes from 1 to 10 messages. (admin only)",
                         "\n!kick <@username>: Kicks someone (admin only).",
                         "\n!ban <@username>: Bans someone (admin only).",
+                        "\n!v {join|leave|play}: Joins or leaves the default vocal channel. Plays the Skullgirls intro theme ^^.",
                         "```"
                     };
 
@@ -168,16 +241,21 @@ namespace SquiglyBot
                     else if (amountToDelete < 1) amountToDelete = 1;
 
                     string plural = "";
-                    if (amountToDelete > 1) plural = "s";
+                    string singular = "ve";
+                    if (amountToDelete > 1)
+                    {
+                        plural = "s";
+                        singular = "";
+                    }
 
-                    Message[] messagesToDelete = await e.Channel.DownloadMessages(amountToDelete); ;
+                    Message[] messagesToDelete = await e.Channel.DownloadMessages(amountToDelete + 1); ;
                     await e.Channel.DeleteMessages(messagesToDelete);
 
                     var commandMessage = await e.Channel.SendMessage($"Deleted {amountToDelete} message{plural}!");
                     await Task.Delay(1337);
                     await commandMessage.Delete();
 
-                    await Logging($"{amountToDelete} message{plural} have been deleted in {e.Server.Name} (Channel: #{e.Channel.Name}) by {e.User.Mention}.");
+                    await Logging($"{amountToDelete} message{plural} ha{singular}{plural} been deleted in {e.Server.Name} (Channel: #{e.Channel.Name}) by {e.User.Mention}.");
                 });
         }
         
@@ -190,7 +268,7 @@ namespace SquiglyBot
         {
             discord.UserBanned += async (s, e) =>
             {
-                if (e.User.Id == 129323526267207680 && e.Server.Id == 210518320888152065)
+                if ((e.User.Id == 129323526267207680 || e.User.Id == 161905660735389696) && e.Server.Id == 210518320888152065)
                 {
                     var logChannel = e.Server.FindChannels("waf").FirstOrDefault();
                     await e.Server.Unban(e.User.Id);
@@ -204,6 +282,42 @@ namespace SquiglyBot
         public async Task Logging(string outputString)
         {
             await discord.GetServer(226363209102262272).GetChannel(226363933185933313).SendMessage(outputString);
+            Console.WriteLine(outputString);
+        }
+
+        public async Task LogAudio(string outputString)
+        {
+            await discord.GetServer(226363209102262272).GetChannel(282870791052460033).SendMessage(outputString);
+            Console.WriteLine(outputString);
+        }
+
+        public void SendAudio(string filePath, IAudioClient _vClient)
+        {
+            var channelCount = discord.GetService<AudioService>().Config.Channels; // Get the number of AudioChannels our AudioService has been configured to use.
+            var OutFormat = new WaveFormat(48000, 16, channelCount); // Create a new Output Format, using the spec that Discord will accept, and with the number of channels that our client supports.
+            using (var MP3Reader = new Mp3FileReader(filePath)) // Create a new Disposable MP3FileReader, to read audio from the filePath parameter
+            using (var resampler = new MediaFoundationResampler(MP3Reader, OutFormat)) // Create a Disposable Resampler, which will convert the read MP3 data to PCM, using our Output Format
+            {
+                resampler.ResamplerQuality = 60; // Set the quality of the resampler to 60, the highest quality
+                int blockSize = OutFormat.AverageBytesPerSecond / 50; // Establish the size of the AudioBuffer
+                byte[] buffer = new byte[blockSize];
+                int byteCount;
+
+                while ((byteCount = resampler.Read(buffer, 0, blockSize)) > 0) // Read audio into the buffer, and keep a loop open while data is present
+                {   
+                    if (byteCount < blockSize)
+                    {
+                        // Incomplete Frame
+                        for (int i = byteCount; i < blockSize; i++)
+                            buffer[i] = 0;
+                    }
+                    
+                    _vClient.Send(buffer, 0, blockSize); // Send the buffer to Discord
+                    
+                }
+                
+            }
+
         }
     }
 }
