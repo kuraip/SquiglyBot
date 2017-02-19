@@ -48,7 +48,7 @@ namespace SquiglyBot
 
             RegisterVocalCommands();
 
-            /*FUNCTIONSss*/
+            /*FUNCTIONS*/
 
             WelcomeMessage();
             LeaveMessage();
