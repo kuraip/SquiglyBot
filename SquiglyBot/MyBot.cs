@@ -277,7 +277,7 @@ namespace SquiglyBot
         private void RegisterPurgeCommand()
         {
             commands.CreateCommand("purge")
-                .Alias(new string[] { "clear", "remove" })
+                .Alias(new string[] { "remove" })
                 .AddCheck((cm, u, ch) => u.ServerPermissions.Administrator)
                 .Parameter("amount", Discord.Commands.ParameterType.Optional)
                 .Do(async (e) =>
@@ -288,22 +288,23 @@ namespace SquiglyBot
                     if (amountToDelete > 10) amountToDelete = 10;
                     else if (amountToDelete < 1) amountToDelete = 1;
 
-                    string plural = "";
-                    string singular = "ve";
+                    string message = "message";
+                    string have = "has";
+                   
                     if (amountToDelete > 1)
                     {
-                        plural = "s";
-                        singular = "";
+                        message = "messages";
+                        have = "have";
                     }
 
                     Message[] messagesToDelete = await e.Channel.DownloadMessages(amountToDelete + 1); ;
                     await e.Channel.DeleteMessages(messagesToDelete);
 
-                    var commandMessage = await e.Channel.SendMessage($"Deleted {amountToDelete} message{plural}!");
+                    var commandMessage = await e.Channel.SendMessage($"Deleted {amountToDelete} {message}!");
                     await Task.Delay(1337);
                     await commandMessage.Delete();
 
-                    await Logging($"{amountToDelete} message{plural} ha{singular}{plural} been deleted in {e.Server.Name} (Channel: #{e.Channel.Name}) by {e.User.Mention}.");
+                    await Logging($"{amountToDelete} {message} {have} been deleted in {e.Server.Name} (Channel: #{e.Channel.Name}) by {e.User.Mention}.");
                 });
         }
 
