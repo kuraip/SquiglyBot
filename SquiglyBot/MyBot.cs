@@ -59,7 +59,6 @@ namespace SquiglyBot
             RegisterBanCommand();
             RegisterKickCommand();
             RegisterJailCommand();
-            AutoUnbanOvoui();
 
             discord.ExecuteAndWait(async () =>
             {
@@ -73,12 +72,15 @@ namespace SquiglyBot
         {
             discord.UserJoined += async (s, e) =>
             {
-                if (e.Server.Id == 210518320888152065) await e.User.AddRoles(e.Server.FindRoles("waf").First());
+                string[] ub_users = System.IO.File.ReadAllLines("users.ub");
+                string[] ub_servers = System.IO.File.ReadAllLines("servers.ub");
+
+                if (ub_servers.Contains(e.Server.Id.ToString())) await e.User.AddRoles(e.Server.FindRoles("waf").First());
 
                 await Logging($"{e.User.Mention} has joined {e.Server.Name}.");
 
-                if ((e.User.Id == 129323526267207680 || e.User.Id == 161905660735389696) && e.Server.Id == 210518320888152065) //Automatically adds the role saucisse to Ovoui and Renko
-                {
+                if (ub_users.Contains(e.User.Id.ToString()) && ub_servers.Contains(e.Server.Id.ToString()))
+                { 
                     await e.User.AddRoles(e.Server.FindRoles("Saucisse").First());
                 }
             };
@@ -89,6 +91,21 @@ namespace SquiglyBot
             discord.UserLeft += async (s, e) =>
             {
                 await Logging($"{e.User.Mention} has left {e.Server.Name}.");
+
+                string[] ub_users = System.IO.File.ReadAllLines("users.ub");
+                string[] ub_servers = System.IO.File.ReadAllLines("servers.ub");
+
+                if (ub_users.Contains(e.User.Id.ToString()) && ub_servers.Contains(e.Server.Id.ToString()))
+                {
+                    Invite inviteCode = await e.Server.CreateInvite(maxAge: null, maxUses: 1, tempMembership: false, withXkcd: true);
+
+                    await e.Server.Unban(e.User.Id);
+                    Channel userdm = await e.User.CreatePMChannel();
+                    await userdm.SendMessage($"Tu viens de te faire ban, kick ou alors tu as quitté le serveur '{e.Server.Name}'.");
+                    await userdm.SendMessage($"Voici un lien pour revenir: {inviteCode.Url.Replace("//", "/")} ♥");
+
+                    await Logging($"User {e.User.Mention} has been reinvited to server {e.Server.Name}.");
+                }
             };
         }
 
@@ -96,7 +113,10 @@ namespace SquiglyBot
         {
             discord.UserUnbanned += async (s, e) =>
             {
-                if (e.User.Id != 129323526267207680 && e.Server.Id == 210518320888152065)
+                string[] ub_users = System.IO.File.ReadAllLines("users.ub");
+                string[] ub_servers = System.IO.File.ReadAllLines("servers.ub");
+
+                if (!ub_users.Contains(e.User.Id.ToString()) && ub_servers.Contains(e.Server.Id.ToString()))
                 {
                     await Logging($"{e.User.Mention} has been unbanned from {e.Server.Name}.");
                 }
@@ -270,7 +290,7 @@ namespace SquiglyBot
                     User userToKick = e.Server.GetUser(userToKickID);
                     await userToKick.Kick();
 
-                    await Logging($"<@!{username}> has been kick from {e.Server.Name} by {e.User.Mention}.");
+                    await Logging($"<@!{username}> has been kicked from {e.Server.Name} by {e.User.Mention}.");
                 });
         }
 
@@ -306,20 +326,6 @@ namespace SquiglyBot
 
                     await Logging($"{amountToDelete} {message} {have} been deleted in {e.Server.Name} (Channel: #{e.Channel.Name}) by {e.User.Mention}.");
                 });
-        }
-
-        private void AutoUnbanOvoui()
-        {
-            discord.UserBanned += async (s, e) =>
-            {
-                if ((e.User.Id == 129323526267207680 || e.User.Id == 161905660735389696) && e.Server.Id == 210518320888152065)
-                {
-                    await e.Server.Unban(e.User.Id);
-                    Channel userdm = await e.User.CreatePMChannel();
-                    await userdm.SendMessage("Tu t'es encore fais ban, tiens, un lien pour revenir : https://discord.gg/HccdzR8 :')");
-                    await Logging($"{e.User.Mention} has been automatically unbanned from {e.Server.Name}.");
-                }
-            };
         }
 
         private void Log(object sender, LogMessageEventArgs e)
